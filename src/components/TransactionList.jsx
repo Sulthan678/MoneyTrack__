@@ -1,5 +1,5 @@
 import TransactionCard from "./TransactionCard";
-function transactionList({transactions, onDeleteTransaction}) {
+function TransactionList({transactions, onDeleteTransaction, onEditTransaction}) {
 
     return(
         
@@ -10,11 +10,13 @@ function transactionList({transactions, onDeleteTransaction}) {
                 <TransactionCard 
                 key={item.id}
                 item={item} 
-                onDeleteTransaction={onDeleteTransaction}/>
+                onDeleteTransaction={onDeleteTransaction}
+                onEditTransaction={onEditTransaction}/>
+
             ))}
         </div>
     
     );
 }
 
-export default transactionList;
+export default TransactionList;

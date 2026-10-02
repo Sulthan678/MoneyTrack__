@@ -1,4 +1,4 @@
-function TransactionCard({item, onDeleteTransaction}) {
+function TransactionCard({item, onDeleteTransaction, onEditTransaction}) {
   return (
     <div>
 
@@ -7,6 +7,10 @@ function TransactionCard({item, onDeleteTransaction}) {
       <p>Type:{item.type}</p>
       <p>Category:{item.category}</p>
       <p>Date:{item.date}</p>
+
+      <button onClick={() => onEditTransaction(item.id)}>
+          Edit
+      </button>
 
       <button onClick={() => onDeleteTransaction(item.id)}>
           Delete

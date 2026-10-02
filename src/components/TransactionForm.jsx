@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function TransactionForm({ onAddTransaction }) {
+function TransactionForm({ onAddTransaction, editingTransaction, onUpdateTransaction }) {
 
     const [name, setName] = useState("");
     const [amount, setAmount] = useState("");
@@ -9,28 +9,60 @@ function TransactionForm({ onAddTransaction }) {
     const[date, setDate] = useState("");
     
     
-            function handleSubmit() {
-                const transactions = {
-                    id: Date.now(),
-                    name, 
+    useEffect(() => {
+    if (editingTransaction) {
+        setName(editingTransaction.name);
+        setAmount(editingTransaction.amount);
+        setType(editingTransaction.type);
+        setCategory(editingTransaction.category);
+        setDate(editingTransaction.date);    }
+    }, [editingTransaction]);
+
+    
+            function handleSubmit(e) {
+                e.preventDefault();
+                const transaction = {
+                    id: editingTransaction
+                        ? editingTransaction.id
+                        : Date.now(),
+
+                    name,
                     amount,
                     type,
                     category,
                     date
-                }
-                onAddTransaction(transactions);
+                };
+            //console.log(editingTransaction);
+
+            if (editingTransaction) {
+                onUpdateTransaction(transaction);
+                resetForm();
+            } else {
+                onAddTransaction(transaction);
+                resetForm();
             }
-            
+    }
+
+
+    function resetForm() {
+    setName("");
+    setAmount("");
+    setType("");
+    setCategory("");
+    setDate("");    
+        }
+
     return (
         <div>
             <h2>Add Transaction</h2>
+             <form onSubmit={handleSubmit}>
 
             <input
                 type="text"
                 placeholder="Transaction name"
                 value = {name}
                 onChange = {(e) => setName(e.target.value)}
-            />
+                />
             <input
                 type="number"
                 placeholder="Transaction amount"
@@ -49,17 +81,23 @@ function TransactionForm({ onAddTransaction }) {
                 placeholder="Transaction category"
                 value = {category}
                 onChange = {(e) => setCategory(e.target.value)}
-            />
+                />
             <input
                 type="date"
                 value = {date}
                 onChange = {(e) => setDate(e.target.value)}
-            />
+                />
 
             <p>currrent name: {name} </p>
-            <button onClick={handleSubmit}>Add Transaction</button>
+
+            <button type="submit">
+            {editingTransaction ? "Update Transaction" : "Add Transaction"}
+            </button>
+                
+                
+            </form>
         </div>
     );
-}
+}   
 
 export default TransactionForm;
